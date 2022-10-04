@@ -1,19 +1,20 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
-import {styles} from './styles'
+import { View, Text } from "react-native";
+import { styles } from "./styles";
+import { products } from "../../constants/data";
 
-const Product = ({navigation}) => {
+const Product = ({ navigation, route }) => {
+    const { productId} = route.params
+    const product = products.find(product => product.id === productId)
+    return (
+        <View style={styles.container}>
+            <Text>id: {product.id}</Text>
+            <Text>{product.title}</Text>
+            <Text>{product.description}</Text>
+            <Text>${product.price}</Text>
+            <Text>weight: {product.weight}</Text>
+        </View>
+    )
+};
 
-return (
-    <View style={styles.container}>
-    <Text style={styles.title}>Product</Text>
-    <Button
-        title="Go to Categories"
-        onPress={()=>navigation.navigate('Categories')}
-    />
-</View>
-)
-
-}
-
-export default Product
+export default Product;
