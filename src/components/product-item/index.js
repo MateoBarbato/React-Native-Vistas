@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from './styles'
+import { styles} from './styles'
 
 const ProductItem = ({ item, onSelected }) => {
-    console.log(item)
+    
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.item} onPress={() => onSelected(item)}>
+            <TouchableOpacity style={styles.item} onPress={() => onSelected(item) }>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.detailsContainer}>
                     <Text style={styles.price}>$ {item.price}</Text>

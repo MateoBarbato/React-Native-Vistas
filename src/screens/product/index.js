@@ -7,13 +7,15 @@ const Product = ({ navigation, route }) => {
     const { productId} = route.params
     const product = products.find(product => product.id === productId)
     return (
-        <View style={styles.container}>
-            <Text>id: {product.id}</Text>
-            <Text>{product.title}</Text>
-            <Text>{product.description}</Text>
-            <Text>${product.price}</Text>
-            <Text>weight: {product.weight}</Text>
-        </View>
+            <View style={styles.container}>
+                <View style={styles.boxCard}>
+                <Text>id: {product.id}</Text>
+                <Text>{product.title}</Text>
+                <Text>{product.description}</Text>
+                <Text>${product.price}</Text>
+                <Text>weight: {product.weight}</Text>
+                </View>
+            </View>
     )
 };
 

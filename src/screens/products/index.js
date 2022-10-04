@@ -8,8 +8,10 @@ const { categoryId } = route.params;
 const productsFiltered = products.filter(product => product.categoryId == categoryId)
 
 
+
 const onSelected = (item)=>{
     navigation.navigate('Product', {name:item.title, productId:item.id})
+    console.warn('item', item)
 }
 const renderItem = ({item}) => <ProductItem item={item} onSelected={onSelected}/>
 
