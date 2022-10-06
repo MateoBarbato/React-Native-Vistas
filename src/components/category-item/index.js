@@ -4,7 +4,7 @@ import { styles } from './styles'
 
 const CategoryItem = ({item, onSelected}) => {
     return(
-        <View styles={styles.container}>
+        <View style={styles.container}>
             <TouchableOpacity 
             onPress={() => onSelected(item)}
             style={{...styles.contentContainer,backgroundColor:item.color}}
