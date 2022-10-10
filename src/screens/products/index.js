@@ -1,36 +1,34 @@
-import React, {useEffect} from "react";
-import {FlatList} from "react-native";
-import {products} from '../../constants/data'
+import React, { useEffect} from "react";
+import { View, Text, Button, FlatList } from "react-native";
 import { ProductItem } from "../../components";
-import { useSelector } from "react-redux";
-import { filteredProducts } from "../../store/actions/products-action";
+import { useSelector, useDispatch } from "react-redux";
+import { products } from "../../constants/data";
+import { styles } from "./styles";
+import { filteredProducts, selectedProduct } from "../../store/actions";
 
-const Products = ({navigation}) => {
-const selectdCategory = useSelector((state) => state.category.selected);
-const { categoryId } = selectdCategory.id
-const productsFiltered = products.filter(product => product.categoryId == categoryId)
+const Products = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const selectedCategory = useSelector((state) => state.category.selected);
 
-const filteredProducts = useSelector((state) => state.products.filteredProducts)
+    const productsFiltered = useSelector((state) => state.products.filteredProducts);
 
+    useEffect(() => {
+        dispatch(filteredProducts(selectedCategory.id))
+    }, []);
 
-useEffect(()=> {
-    dispatchEvent(filteredProducts(categoryId))
-},[]);
+    const onSelected = (item) => {
+        dispatch(selectedProduct(item.id))
+       navigation.navigate('Product', { name: item.title});
+    };   
+    const renderItem = ({ item }) => <ProductItem item={item} onSelected={onSelected} />
 
+    return (
+        <FlatList 
+            data={productsFiltered}
+            renderItem={renderItem}
+            keyExtractor={item => item.id.toString()}
+        />
+    )
+};
 
-const onSelected = (item)=>{
-    navigation.navigate('Product', {name:item.title, productId:item.id})
-}
-const renderItem = ({item}) => <ProductItem item={item} onSelected={onSelected}/>
-
-return (
-    <FlatList
-        data={productsFiltered}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-    />
-)
-
-}
-
-export default Products
+export default Products;

@@ -1,25 +1,27 @@
 import { categories } from '../../constants/data/categories'
-import { categoryTypes } from '../types'
+import { categoryTypes } from '../types';
 
+const { SELECT_CATEGORY } = categoryTypes;
 
-const {SELECT_CATEGORY} = categoryTypes
 const initialState = {
     categories: categories,
-    selected : null ,
+    selected: null
 }
 
-
-const categoryReducer =  (state=initialState, action) => {
-    switch(action.type) {
+const categoryReducer = (state = initialState, action) => {
+    switch (action.type) {
         case SELECT_CATEGORY:
-            const indexCategory = state.categories.findIndex((category) => category.id == action.id)
-            if (indexCategory == -1) return state;
-            return { 
-                ...state, selected:state.categories[indexCategory]
+            const indexCategory = state.categories.findIndex(
+                (category) => category.id === action.categoryId
+            );
+            if(indexCategory === -1) return state;
+            return {
+                ...state,
+                selected: state.categories[indexCategory]
             }
-        default : 
-        return state;
+        default:
+            return state;
     }
 }
 
-export default categoryReducer
+export default categoryReducer;
