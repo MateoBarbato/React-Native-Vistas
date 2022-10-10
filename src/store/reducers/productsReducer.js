@@ -2,7 +2,7 @@ import { products} from '../../constants/data/products'
 import { productsType } from '../types';
 const {SELECTED_PRODUCT,FILTERED_PRODUCTS} = productsType
 
-const InitialState = {
+const initialState = {
     products:products,
     selected: null,
     filteredProducts: [],
