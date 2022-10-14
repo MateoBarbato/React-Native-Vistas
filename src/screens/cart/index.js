@@ -1,43 +1,49 @@
 import React from "react";
-import {View,FlatList,Text, TouchableOpacity} from 'react-native'
-import {styles} from './styles'
-import {cart} from '../../constants/data'
+import { View, FlatList, TouchableOpacity, Text} from "react-native";
+import { styles } from "./styles";
+import { useSelector, useDispatch } from "react-redux";
 import CartItem from "../../components/cart-item";
+import { confirmCart, removeFromCart } from "../../store/actions";
 
 const Cart = ({navigation}) => {
-
-    const total = 1400;
-
+    const dispatch = useDispatch();
+    const items = useSelector(state => state.cart.items);
+    const total = useSelector(state => state.cart.total);
+    
     const onDelete = (id) => {
-        console.warn(id)
+        dispatch(removeFromCart(id))
     }
-   
-    const renderItem = ({item}) => <CartItem item={item}/>
-   
+    const onConfirm = () => {
+        dispatch(confirmCart(items, total));
+    }
+
+    const renderItem = ({item}) => <CartItem item={item} onDelete={onDelete} />
+
     return (
         <View style={styles.container}>
             <View style={styles.containerList}>
-                <FlatList
-                    data={cart}
-                    renderItem={renderItem}
-                    style={styles.containerList}
-                    keyExtractor={item => item.id.toString()}
-                />
+           <FlatList 
+                data={items}
+                renderItem={renderItem}
+                style={styles.containerList}
+                keyExtractor={item => item.id.toString()}
+            />
             </View>
             <View style={styles.footer}>
                 <TouchableOpacity 
-                    style={styles.buttonConfirm} 
-                    onPress={()=>null}
+                    style={items.length === 0 ?  styles.disabledButtonConfirm : styles.buttonConfirm}
+                    onPress={onConfirm}
+                    disabled={items.length === 0}
                 >
-                <Text style={styles.textButtonConfirm}>Confirm</Text>
-                <View style={styles.totalContainer}>
-                    <Text style={styles.totalTitle}>Total:</Text>
-                    <Text style={styles.total}>${total}</Text>
-                </View>
+                    <Text style={styles.textButtonConfirm}>Confirm</Text>
+                    <View style={styles.totalContainer}>
+                        <Text style={styles.totalTitle}>Total: </Text>
+                        <Text style={styles.total}>${total}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         </View>
     )
-}
+};
 
-export default Cart
+export default Cart;
