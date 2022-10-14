@@ -1,12 +1,20 @@
 import React from "react";
 import {View,Text, FlatList} from 'react-native'
 import {styles} from './styles'
-import { orders } from "../../constants/data";
+import { useSelector,useDispatch } from "react-redux";
 import OrderItem from "../../components/order-item";
+import { useEffect } from 'react';
+import { getOrders } from "../../store/actions/orders-action";
 
 const Orders = ({navigation}) => {
-    const renderItem = ({item}) => <OrderItem item={item}/>
+    const dispatch = useDispatch();
+    const orders = useSelector(state => state.orders.list)
 
+    useEffect(() => {
+        dispatch(getOrders());
+    },[])
+    
+    const renderItem = ({item}) => <OrderItem item={item}/>
     return ( <View style={styles.container}>
             <View style={styles.containerList}>
                 <FlatList

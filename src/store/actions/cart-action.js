@@ -34,6 +34,7 @@ export const confirmCart = (items, total) => {
 
             const result = await response.json();
             console.warn(result)
+
             dispatch({
                 type: CONFIRM_ORDER,
                 result: result,
