@@ -14,6 +14,12 @@ const ordersReducer = (state=initialState,action) => {
                 ...state,
                 list:action.orders
             }
+
+        case DELETE_ORDER:
+            return{
+                ...state,
+                list:state.list.filter(order => order.id !== action.id)
+            }
         default:
             return state
         

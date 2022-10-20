@@ -12,11 +12,11 @@ export const getOrders = () => {
                 }
             });
 
-            const data = await response.json
+            const data = await response.json();
             const orders = Object.keys(data).map(key => {
                 return {
                     ...data[key],
-                    id:key
+                    id:key,
                 }
             })
 
@@ -28,4 +28,30 @@ export const getOrders = () => {
             console.log(error.message)
         }
     }
+};
+
+export const deleteOrder = (id) => {
+    return async(dispatch) => {
+
+        try{ 
+            const response = await fetch(`${URL_API}/orders/${id}.json`,{
+                method:'DELETE',
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json()
+            
+            dispatch({
+                type:DELETE_ORDER,
+                id
+            })
+        } 
+
+        catch(error){
+            console.log(error.message)
+        }
+    }
+
 }

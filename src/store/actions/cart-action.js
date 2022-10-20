@@ -20,6 +20,7 @@ export const confirmOrder = (order) => ({
 export const confirmCart = (items, total) => {
     return async (dispatch) => {
         try {
+            
             const response = await fetch(`${URL_API}/orders.json`, {
                 method: 'POST',
                 headers: {
