@@ -31,7 +31,7 @@ export const singUp = (email,password) => {
             })
        
         }catch(error){
-            console.log(error.message)
+            console.log(error)
         }
     }
 };

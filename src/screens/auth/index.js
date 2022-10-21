@@ -14,9 +14,11 @@ const Auth = (navigation) => {
     const title = isLogin ? 'Login' : 'Registro';
     const message = isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?';
 
-    const onHandleSubmit= () => {
+    const onHandleSubmit = () => {
+        console.log(email)
+        console.log(password)
         dispatch(singUp(email,password));
-    }
+    };
 
     
     return(
