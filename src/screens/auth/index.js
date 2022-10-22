@@ -1,11 +1,11 @@
 import React, { useState, useReducer} from "react";
 import { useDispatch } from "react-redux";
 import { View, Text, TouchableOpacity, Button, TextInput, KeyboardAvoidingView } from "react-native";
-import { Input } from "../../components";
+import { Input } from '../../components/index'
 import { colors } from "../../constants/themes";
 import { styles } from "./styles";
 import { signIn, signUp } from "../../store/actions/index";
-import { onFocusOut, onInputChange, UPDATED_FORM } from "../../utils/forms";
+import { onFocusOut, onInputChange, UPDATED_FORM } from "../../utils/froms";
 
 const initialState = {
     email: { value: '', error: '', touched: false, hasError: true },
