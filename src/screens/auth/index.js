@@ -1,63 +1,108 @@
-import React ,{useState} from 'react'
-import { View, Text,TouchableOpacity,Button,TextInput,KeyboardAvoidingView} from 'react-native'
-import {styles} from './style'
-import { colors } from '../../constants/themes'
-import { useDispatch } from 'react-redux'
-import { singUp } from '../../store/actions/auth-action'
+import React, { useState, useReducer} from "react";
+import { useDispatch } from "react-redux";
+import { View, Text, TouchableOpacity, Button, TextInput, KeyboardAvoidingView } from "react-native";
+import { Input } from "../../components";
+import { colors } from "../../constants/themes";
+import { styles } from "./styles";
+import { signIn, signUp } from "../../store/actions/index";
+import { onFocusOut, onInputChange, UPDATED_FORM } from "../../utils/forms";
 
-const Auth = (navigation) => {
+const initialState = {
+    email: { value: '', error: '', touched: false, hasError: true },
+    password: { value: '', error: '', touched: false, hasError: true },
+    isFormValid: false,
+}
+
+
+
+const formReducer = (state, action) => {
+    switch (action.type) {
+        case UPDATED_FORM: 
+        const { name, value, hasError, error, touched, isFormValid} = action.data;
+        return {
+            ...state,
+            [name]: {
+                ...state[name],
+                value,
+                hasError,
+                error,
+                touched,
+            },
+            isFormValid
+        }
+        default:
+            return state;
+    }
+}
+
+const Auth = ({ navigation }) => {
     const dispatch = useDispatch();
-
-    const [isLogin,setIsLogin] = useState(true)
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [isLogin, setIsLogin] = useState(true);
+    const [formState, dispatchFormState] = useReducer(formReducer, initialState);
     const title = isLogin ? 'Login' : 'Registro';
     const message = isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?';
+    const messageAction = isLogin ? 'Ingresar' : 'Registrarse';
 
     const onHandleSubmit = () => {
-        console.log(email)
-        console.log(password)
-        dispatch(singUp(email,password));
+        const { password, email } = formState;
+        dispatch(isLogin ? signIn(email.value ,password.value ) : signUp(email.value, password.value));
     };
 
-    
-    return(
-        <KeyboardAvoidingView style={styles.containerKeyboard} behavior='padding'>
-            <View style={styles.container}>
+    const onHandleChange = (value, type) => {
+        onInputChange(type, value, dispatchFormState, formState)
+    }
+
+    const onHandleBlur = (value, type) => {
+        onFocusOut(type, value, dispatchFormState, formState)
+    }
+    return (
+        <KeyboardAvoidingView style={styles.containerKeyboard} behavior="padding">
+            <View style={ styles.container}>
                 <Text style={styles.title}>{title}</Text>
-                <Text style={styles.label}>Email</Text>
-                <TextInput 
+                <Input 
                     style={styles.input}
-                    placeholder='Write your email'
-                    value={email}
+                    label="Email"
+                    placeholder="ingrese su email"
+                    value={formState.email.value}
                     placeholderTextColor={colors.gray}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText = {(text)=> setEmail(text)}
+                    onChangeText={(text) => onHandleChange(text, 'email')}
+                    onBlur={(e) => onHandleBlur(e.nativeEvent.text, 'email')}
+                    hasError={formState.email.hasError}
+                    error={formState.email.error}
+                    touched={formState.email.touched}
                 />
-                <TextInput 
+                <Input 
                     style={styles.input}
-                    placeholder='Write your password'
-                    value={password}
+                    label="Password"
+                    placeholderTextColor={colors.gray}
+                    value={formState.password.value}
+                    placeholder="ingrese su contraseña"
                     secureTextEntry={true}
+                    autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText = {(text)=> setPassword(text)}
+                    onChangeText={(text) => onHandleChange(text, 'password')}
+                    onBlur={(e) => onHandleBlur(e.nativeEvent.text, 'password')}
+                    hasError={formState.password.hasError}
+                    error={formState.password.error}
+                    touched={formState.password.touched}
                 />
-                <Button
-                    title={title}   
+                <Button 
+                    title={messageAction}
                     color={colors.primary}
                     onPress={onHandleSubmit}
-                    disabled={!email || !password}
+                    disabled={!formState.isFormValid}
                 />
-                <TouchableOpacity onPress={()=>setIsLogin(!isLogin)}>
-                    <Text style={styles.promtAction}>{message}</Text>
+                <View style={styles.prompt}>
+                <TouchableOpacity style={styles.promptButton} onPress={() => setIsLogin(!isLogin)}>
+                    <Text style={styles.promptMessage}>{message}</Text>
                 </TouchableOpacity>
+                </View>
             </View>
         </KeyboardAvoidingView>
     )
-
-    
 }
 
 export default Auth;
